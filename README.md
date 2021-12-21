@@ -1,4 +1,4 @@
-# hyperblobs
+# hyperblobee
 
 :construction: **This is currently experimental and is unstable**
 
@@ -10,7 +10,7 @@ Each blob is identified by unique (utf-8) key.
 
 ```js
 const db = new Hyperbee(core)
-const blobs = new Hyperblobs(db)
+const blobs = new Hyperblobee(db)
 
 const key = 'my-first-file'
 await blobs.put(key, Buffer.from('hello world', 'utf-8'))
@@ -29,7 +29,7 @@ npm i hyperblobee
 
 `const Hyperblobee = require('hyperblobee')`
 
-#### `const blobs = new Hyperblobs(db, opts)`
+#### `const blobs = new Hyperblobee(db, opts)`
 
 Create a new blob store wrapping a single Hyperbee instance.
 
