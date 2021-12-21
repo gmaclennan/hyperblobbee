@@ -51,14 +51,14 @@ module.exports = class Hyperblobee {
   }
 
   /**
-   * @param {string} id
+   * @param {string} key
    * @param {Buffer} blob
    * @param {Options} [opts]
    */
-  async put(id, blob, opts = {}) {
+  async put(key, blob, opts = {}) {
     const blockSize = opts.blockSize || this._blockSize
 
-    const stream = this.createWriteStream(id, opts)
+    const stream = this.createWriteStream(key, opts)
     for (let i = 0; i < blob.length; i += blockSize) {
       stream.write(blob.slice(i, i + blockSize))
     }
@@ -66,35 +66,35 @@ module.exports = class Hyperblobee {
 
     return new Promise((resolve, reject) => {
       stream.once('error', reject)
-      stream.once('close', () => resolve(stream.id))
+      stream.once('close', () => resolve(stream))
     })
   }
 
   /**
-   * @param {string} id
+   * @param {string} key
    * @param {Options} [opts]
    */
-  async get(id, opts) {
+  async get(key, opts) {
     const res = []
-    for await (const block of this.createReadStream(id, opts)) {
+    for await (const block of this.createReadStream(key, opts)) {
       res.push(block)
     }
     return Buffer.concat(res)
   }
 
   /**
-   * @param {string} id
+   * @param {string} key
    * @param {Options} [opts]
    */
-  createReadStream(id, opts) {
-    return new BlobReadStream(this._db, id, opts)
+  createReadStream(key, opts) {
+    return new BlobReadStream(this._db, key, opts)
   }
 
   /**
-   * @param {string} id
+   * @param {string} key
    * @param {Options} [opts]
    */
-  createWriteStream(id, opts) {
-    return new BlobWriteStream(this._db, id, this._lock, opts)
+  createWriteStream(key, opts) {
+    return new BlobWriteStream(this._db, key, this._lock, opts)
   }
 }
