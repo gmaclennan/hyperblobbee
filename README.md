@@ -1,6 +1,6 @@
 # hyperblobs
 
-** :construction: This is currently experimental and is unstable **
+:construction: **This is currently experimental and is unstable**
 
 ![Test on Node.js](https://github.com/gmaclennan/hyperblobee/workflows/Test%20on%20Node.js/badge.svg)
 
