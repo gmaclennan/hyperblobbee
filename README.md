@@ -37,7 +37,7 @@ Options can include:
 
 ```js
 {
-  blockSize: 64KB // The block size that will be used when storing large blobs.
+  blockSize: 65536, // The block size (bytes) that will be used when storing large blobs.
 }
 ```
 
@@ -49,7 +49,7 @@ Options can include:
 
 ```js
 {
-  blockSize: 64KB, // The block size that will be used when storing large blobs.
+  blockSize: 65536, // The block size (bytes) that will be used when storing large blobs.
 }
 ```
 

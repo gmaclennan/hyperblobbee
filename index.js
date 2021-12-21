@@ -8,9 +8,6 @@ const DEFAULT_BLOCK_SIZE = 2 ** 16
 /**
  * @typedef {Object} Options
  * @property {number} [blockSize=2**16] The block size that will be used when storing large blobs.
- * @property {number} [start=0] Relative offset to start within the blob
- * @property {number} [end=blob.length - 1] End offset within the blob (inclusive)
- * @property {number} [length=blob.length] Number of bytes to read.
  */
 
 module.exports = class Hyperblobee {
