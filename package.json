@@ -1,0 +1,40 @@
+{
+  "name": "hyperblobee",
+  "version": "1.0.0-alpha.1",
+  "description": "** :construction: This is currently experimental and is unstable **",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "keywords": [],
+  "author": "Gregor MacLennan",
+  "license": "MIT",
+  "dependencies": {
+    "mutexify": "^1.4.0",
+    "pumpify": "^2.0.1",
+    "streamx": "^2.12.0",
+    "through2": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/mutexify": "^1.2.0",
+    "@types/node": "^17.0.2",
+    "@types/pumpify": "^1.4.1",
+    "@types/streamx": "^2.9.1",
+    "hyperbee": "^1.7.0",
+    "hypercore": "^10.0.0-alpha.19",
+    "random-access-memory": "^4.0.0",
+    "tape": "^5.3.2"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gmaclennan/hyperblobee.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gmaclennan/hyperblobee/issues"
+  },
+  "homepage": "https://github.com/gmaclennan/hyperblobee#readme"
+}
