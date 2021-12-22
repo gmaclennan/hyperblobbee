@@ -2,6 +2,7 @@ const test = require('tape')
 const Hypercore = require('hypercore')
 const Hyperbee = require('hyperbee')
 const ram = require('random-access-memory')
+const { Writable } = require('streamx')
 const Hyperblobee = require('..')
 
 test('can get/put a large blob', async (t) => {
@@ -38,6 +39,27 @@ test('can put/get two blobs in one core', async (t) => {
     const res = await blobs.get(id)
     t.true(res.equals(buf))
   }
+
+  t.end()
+})
+
+test('block size is respected for streams', async (t) => {
+  const core = new Hypercore(ram)
+  const db = new Hyperbee(core)
+  const blobs = new Hyperblobee(db)
+  const blockSize = 2 ** 16
+
+  const buf = Buffer.alloc(5 * blockSize).fill('abcdefg')
+  const id = 'foo'
+  const ws = blobs.createWriteStream(id)
+  for (let i = 0; i < blob.length; i += blockSize * 0.75) {
+    ws.write(blob.slice(i, i + blockSize))
+  }
+  ws.end()
+  
+  
+  const result = await blobs.db.get(id + '/0')
+  t.equals(result.length, blobs.blockSize)
 
   t.end()
 })
