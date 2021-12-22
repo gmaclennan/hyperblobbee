@@ -52,14 +52,14 @@ test('block size is respected for streams', async (t) => {
   const buf = Buffer.alloc(5 * blockSize).fill('abcdefg')
   const id = 'foo'
   const ws = blobs.createWriteStream(id)
-  for (let i = 0; i < blob.length; i += blockSize * 0.75) {
-    ws.write(blob.slice(i, i + blockSize))
+  for (let i = 0; i < buf.length; i += blockSize * 0.75) {
+    ws.write(buf.slice(i, i + blockSize))
   }
   ws.end()
   
   
   const result = await blobs.db.get(id + '/0')
-  t.equals(result.length, blobs.blockSize)
+  t.equals(result.length, blockSize)
 
   t.end()
 })
