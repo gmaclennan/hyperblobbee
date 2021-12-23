@@ -12,7 +12,7 @@ const DEFAULT_BUFFER_SIZE = 1024 * 1024 * 10 // 10MB
  * @property {number} [bufferSize] The size of the buffer used when writing large blobs.
  */
 
-module.exports = class Hyperblobee {
+module.exports = class Hyperblobbee {
   /** @private */
   _blockSize
   /** @private */

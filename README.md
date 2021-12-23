@@ -1,8 +1,8 @@
-# Hyperblobee
+# Hyperblobbee
 
 :construction: **This is currently experimental and is unstable**
 
-![Test on Node.js](https://github.com/gmaclennan/hyperblobee/workflows/Test%20on%20Node.js/badge.svg)
+![Test on Node.js](https://github.com/gmaclennan/hyperblobbee/workflows/Test%20on%20Node.js/badge.svg)
 
 A simple blob store for [Hypercore](https://github.com/hypercore-protocol/hypercore-next) built on [Hyperbee](https://github.com/hypercore-protocol/hyperbee), heavily inspired by [andrewosh/hyperblobs](https://github.com/andrewosh/hyperblobs).
 
@@ -10,7 +10,7 @@ Each blob is identified by unique (utf-8) key.
 
 ```js
 const db = new Hyperbee(core)
-const blobs = new Hyperblobee(db)
+const blobs = new Hyperblobbee(db)
 
 const key = 'my-first-file'
 await blobs.put(key, Buffer.from('hello world', 'utf-8'))
@@ -22,14 +22,14 @@ If the blob is large, there's a Streams interface (`createReadStream` and `creat
 ## Installation
 
 ```
-npm i hyperblobee
+npm i hyperblobbee
 ```
 
 ## API
 
-`const Hyperblobee = require('hyperblobee')`
+`const Hyperblobbee = require('hyperblobbee')`
 
-#### `const blobs = new Hyperblobee(db, opts)`
+#### `const blobs = new Hyperblobbee(db, opts)`
 
 Create a new blob store wrapping a single Hyperbee instance.
 

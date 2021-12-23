@@ -1,5 +1,5 @@
 {
-  "name": "hyperblobee",
+  "name": "hyperblobbee",
   "version": "1.0.0-alpha.1",
   "description": "** :construction: This is currently experimental and is unstable **",
   "main": "index.js",
@@ -33,10 +33,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gmaclennan/hyperblobee.git"
+    "url": "git+https://github.com/gmaclennan/hyperblobbee.git"
   },
   "bugs": {
-    "url": "https://github.com/gmaclennan/hyperblobee/issues"
+    "url": "https://github.com/gmaclennan/hyperblobbee/issues"
   },
-  "homepage": "https://github.com/gmaclennan/hyperblobee#readme"
+  "homepage": "https://github.com/gmaclennan/hyperblobbee#readme"
 }

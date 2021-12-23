@@ -4,13 +4,13 @@ const Hyperbee = require('hyperbee')
 const ram = require('random-access-memory')
 const { Writable } = require('streamx')
 const { once } = require('events')
-const Hyperblobee = require('..')
+const Hyperblobbee = require('..')
 const lexi = require('lexicographic-integer')
 
 test('can get/put a large blob', async (t) => {
   const core = new Hypercore(ram)
   const db = new Hyperbee(core)
-  const blobs = new Hyperblobee(db)
+  const blobs = new Hyperblobbee(db)
 
   // Test a blob larger than the buffer size (defaults to 10MB)
   // Test our chunking by ensuring the blob will not divide evenly
@@ -25,7 +25,7 @@ test('can get/put a large blob', async (t) => {
 test('can get/put a small blob', async (t) => {
   const core = new Hypercore(ram)
   const db = new Hyperbee(core)
-  const blobs = new Hyperblobee(db)
+  const blobs = new Hyperblobbee(db)
 
   // Check something smaller than the block size works
   const buf = Buffer.alloc(blobs.blockSize / 2).fill('abcdefg')
@@ -40,7 +40,7 @@ test('can get/put a small blob', async (t) => {
 test('can put/get two blobs in one core', async (t) => {
   const core = new Hypercore(ram)
   const db = new Hyperbee(core)
-  const blobs = new Hyperblobee(db)
+  const blobs = new Hyperblobbee(db)
 
   {
     const buf = Buffer.alloc(5 * blobs.blockSize).fill('abcdefg')
@@ -65,7 +65,7 @@ test("block size isn't affected by chunk size of streams", async (t) => {
   const core = new Hypercore(ram)
   const db = new Hyperbee(core)
   const blockSize = 2 ** 16
-  const blobs = new Hyperblobee(db, { blockSize })
+  const blobs = new Hyperblobbee(db, { blockSize })
 
   const buf = Buffer.alloc(5 * blockSize).fill('abcdefg')
 
@@ -94,7 +94,7 @@ test("block size isn't affected by chunk size of streams", async (t) => {
 
 test.skip('can seek to start/length within one blob, one block', async (t) => {
   const core = new Hypercore(ram)
-  const blobs = new Hyperblobee(core)
+  const blobs = new Hyperblobbee(core)
 
   const buf = Buffer.alloc(5 * blobs.blockSize).fill('abcdefg')
   const id = await blobs.put(buf)
@@ -106,7 +106,7 @@ test.skip('can seek to start/length within one blob, one block', async (t) => {
 
 test.skip('can seek to start/length within one blob, multiple blocks', async (t) => {
   const core = new Hypercore(ram)
-  const blobs = new Hyperblobee(core, { blockSize: 10 })
+  const blobs = new Hyperblobbee(core, { blockSize: 10 })
 
   const buf = Buffer.concat([
     Buffer.alloc(10).fill('a'),
@@ -121,7 +121,7 @@ test.skip('can seek to start/length within one blob, multiple blocks', async (t)
 
 test.skip('can seek to start/length within one blob, multiple blocks, multiple blobs', async (t) => {
   const core = new Hypercore(ram)
-  const blobs = new Hyperblobee(core, { blockSize: 10 })
+  const blobs = new Hyperblobbee(core, { blockSize: 10 })
 
   {
     const buf = Buffer.alloc(5 * blobs.blockSize).fill('abcdefg')
@@ -143,7 +143,7 @@ test.skip('can seek to start/length within one blob, multiple blocks, multiple b
 
 test.skip('can seek to start/end within one blob', async (t) => {
   const core = new Hypercore(ram)
-  const blobs = new Hyperblobee(core)
+  const blobs = new Hyperblobbee(core)
 
   const buf = Buffer.alloc(5 * blobs.blockSize).fill('abcdefg')
   const id = await blobs.put(buf)
@@ -155,7 +155,7 @@ test.skip('can seek to start/end within one blob', async (t) => {
 
 test.skip('basic seek', async (t) => {
   const core = new Hypercore(ram)
-  const blobs = new Hyperblobee(core)
+  const blobs = new Hyperblobbee(core)
 
   const buf = Buffer.alloc(5 * blobs.blockSize).fill('abcdefg')
   const id = await blobs.put(buf)
