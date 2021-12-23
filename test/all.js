@@ -3,14 +3,32 @@ const Hypercore = require('hypercore')
 const Hyperbee = require('hyperbee')
 const ram = require('random-access-memory')
 const { Writable } = require('streamx')
+const { once } = require('events')
 const Hyperblobee = require('..')
+const lexi = require('lexicographic-integer')
 
 test('can get/put a large blob', async (t) => {
   const core = new Hypercore(ram)
   const db = new Hyperbee(core)
   const blobs = new Hyperblobee(db)
 
-  const buf = Buffer.alloc(5 * blobs.blockSize).fill('abcdefg')
+  // Test a blob larger than the buffer size (defaults to 10MB)
+  // Test our chunking by ensuring the blob will not divide evenly
+  const buf = Buffer.alloc(blobs.bufferSize * 9.5).fill('abcdefg')
+  const id = 'foo'
+  await blobs.put(id, buf)
+  const result = await blobs.get(id)
+  t.true(result.equals(buf))
+  t.end()
+})
+
+test('can get/put a small blob', async (t) => {
+  const core = new Hypercore(ram)
+  const db = new Hyperbee(core)
+  const blobs = new Hyperblobee(db)
+
+  // Check something smaller than the block size works
+  const buf = Buffer.alloc(blobs.blockSize / 2).fill('abcdefg')
   const id = 'foo'
   await blobs.put(id, buf)
   const result = await blobs.get(id)
@@ -43,23 +61,33 @@ test('can put/get two blobs in one core', async (t) => {
   t.end()
 })
 
-test('block size is respected for streams', async (t) => {
+test("block size isn't affected by chunk size of streams", async (t) => {
   const core = new Hypercore(ram)
   const db = new Hyperbee(core)
-  const blobs = new Hyperblobee(db)
   const blockSize = 2 ** 16
+  const blobs = new Hyperblobee(db, { blockSize })
 
   const buf = Buffer.alloc(5 * blockSize).fill('abcdefg')
-  const id = 'foo'
-  const ws = blobs.createWriteStream(id)
-  for (let i = 0; i < buf.length; i += (blockSize * 0.75)) {
-    ws.write(buf.slice(i, i + blockSize))
+
+  // Write chunks to the stream that are smaller and larger than blockSize
+  for (const chunkSize of [blockSize / 2, blockSize * 2]) {
+    const id = String(chunkSize)
+    const ws = blobs.createWriteStream(id)
+    for (let i = 0; i < buf.length; i += chunkSize) {
+      const chunk = buf.slice(i, i + chunkSize)
+      ws.write(chunk)
+    }
+    ws.end()
+    await once(ws, 'finish')
+    const { value } = await blobs.db.get(
+      Buffer.concat([
+        Buffer.from(id),
+        Buffer.from([0]),
+        Buffer.from(lexi.pack(0)),
+      ])
+    )
+    t.equals(value.length, blockSize)
   }
-  ws.end()
-  
-  
-  const result = await blobs.db.get(id + '/0')
-  t.equals(result.length, blockSize)
 
   t.end()
 })

@@ -16,12 +16,14 @@
     "through2": "^4.0.2"
   },
   "devDependencies": {
+    "@types/lexicographic-integer": "^1.1.0",
     "@types/mutexify": "^1.2.0",
     "@types/node": "^17.0.2",
     "@types/pumpify": "^1.4.1",
     "@types/streamx": "^2.9.1",
     "hyperbee": "^1.7.0",
     "hypercore": "^10.0.0-alpha.19",
+    "lexicographic-integer": "^1.1.0",
     "random-access-memory": "^4.0.0",
     "tape": "^5.3.2"
   },

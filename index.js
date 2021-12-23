@@ -3,16 +3,20 @@ const mutexify = require('mutexify')
 
 const { BlobReadStream, BlobWriteStream } = require('./lib/streams')
 
-const DEFAULT_BLOCK_SIZE = 2 ** 16
+const DEFAULT_BLOCK_SIZE = 1024 * 512 // 512KB
+const DEFAULT_BUFFER_SIZE = 1024 * 1024 * 10 // 10MB
 
 /**
  * @typedef {Object} Options
- * @property {number} [blockSize=2**16] The block size that will be used when storing large blobs.
+ * @property {number} [blockSize] The block size that will be used when storing large blobs.
+ * @property {number} [bufferSize] The size of the buffer used when writing large blobs.
  */
 
 module.exports = class Hyperblobee {
   /** @private */
   _blockSize
+  /** @private */
+  _bufferSize
   /** @private */
   _lock
   /** @private */
@@ -20,20 +24,25 @@ module.exports = class Hyperblobee {
 
   /**
    * @param {any} db Hyperbee instance
-   * @param {Pick<Options, 'blockSize'>} [opts]
+   * @param {Pick<Options, 'blockSize' | 'bufferSize'>} [opts]
    */
   constructor(db, opts = {}) {
     this._blockSize = opts.blockSize || DEFAULT_BLOCK_SIZE
+    this._bufferSize = opts.bufferSize || DEFAULT_BUFFER_SIZE
     this._lock = mutexify()
     this._db = db.sub(Buffer.alloc(0), {
       sep: Buffer.alloc(0),
       valueEncoding: 'binary',
-      keyEncoding: 'utf-8',
+      keyEncoding: 'binary',
     })
   }
 
   get blockSize() {
     return this._blockSize
+  }
+
+  get bufferSize() {
+    return this._bufferSize
   }
 
   /**
@@ -53,11 +62,11 @@ module.exports = class Hyperblobee {
    * @param {Options} [opts]
    */
   async put(key, blob, opts = {}) {
-    const blockSize = opts.blockSize || this._blockSize
+    if (!opts.blockSize) opts.blockSize = this._blockSize
 
     const stream = this.createWriteStream(key, opts)
-    for (let i = 0; i < blob.length; i += blockSize) {
-      stream.write(blob.slice(i, i + blockSize))
+    for (let i = 0; i < blob.length; i += opts.blockSize) {
+      stream.write(blob.slice(i, i + opts.blockSize))
     }
     stream.end()
 
@@ -81,7 +90,7 @@ module.exports = class Hyperblobee {
 
   /**
    * @param {string} key
-   * @param {Options} [opts]
+   * @param {Options} [opts] - TODO: Fix this type, shouldn't include `blockSize`
    */
   createReadStream(key, opts) {
     return new BlobReadStream(this._db, key, opts)
@@ -91,7 +100,11 @@ module.exports = class Hyperblobee {
    * @param {string} key
    * @param {Options} [opts]
    */
-  createWriteStream(key, opts) {
-    return new BlobWriteStream(this._db, key, this._lock, opts)
+  createWriteStream(key, opts = {}) {
+    return new BlobWriteStream(this._db, key, this._lock, {
+      ...opts,
+      blockSize: opts.blockSize || this._blockSize,
+      bufferSize: opts.bufferSize || this._bufferSize,
+    })
   }
 }
