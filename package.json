@@ -16,16 +16,21 @@
     "through2": "^4.0.2"
   },
   "devDependencies": {
+    "@stdlib/bench": "^0.0.12",
     "@types/lexicographic-integer": "^1.1.0",
     "@types/mutexify": "^1.2.0",
     "@types/node": "^17.0.2",
     "@types/pumpify": "^1.4.1",
     "@types/streamx": "^2.9.1",
+    "del": "^6.0.0",
     "hyperbee": "^1.7.0",
+    "hyperblobs": "^2.0.0-alpha.1",
     "hypercore": "^10.0.0-alpha.19",
+    "hyperdrive": "^10.21.0",
     "lexicographic-integer": "^1.1.0",
     "random-access-memory": "^4.0.0",
-    "tape": "^5.3.2"
+    "tape": "^5.3.2",
+    "tempy": "^1.0.1"
   },
   "directories": {
     "lib": "lib",
